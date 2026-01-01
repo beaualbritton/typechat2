@@ -9,7 +9,7 @@ export class Client
 
   constructor(username: string, server: string, port: number, onMessage: (msg: string) => void)
   {
-    this.url = `wss://${server}:${port}/?username=${username}`
+    this.url = `ws://${server}:${port}/?username=${username}`
     this.username = username;
     this.onMessage = onMessage;
 
