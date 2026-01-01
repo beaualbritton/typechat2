@@ -1,7 +1,7 @@
 import { Client } from '../../../../lib/client';
 import { useState, useEffect} from 'react';
 
-export function useClient(username: string, connected: boolean)
+export function useClient(username: string, room:string, connected: boolean)
 {
   const [messages, setMessages] = useState<string[]>(['typechat web demo :P']);
   const [client, setClient] = useState<Client>();
@@ -11,7 +11,7 @@ export function useClient(username: string, connected: boolean)
       if(connected && !client)
       {
         let onMessage = (msg: string) => setMessages(prev => [...prev, msg]);
-        setClient(new Client(username, 'localhost', 3000, onMessage))
+        setClient(new Client(username, room, 'localhost', 3000, onMessage))
       }
 
   },[connected, username, client]);
