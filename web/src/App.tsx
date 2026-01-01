@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, type FormEvent } from 'react'
+import { useClient } from './lib/hooks/useClient.ts';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [input, setInput] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [connected, setConnection] = useState<boolean>(false);
+
+  const {messages, sendMessage} = useClient(username, connected);
+
+  const submit = (e: FormEvent) =>
+  {
+    e.preventDefault();
+    sendMessage(input)
+    setInput('');
+  };
+
+  if(!connected)
+  {
+    return(
+      <div className="flex flex-col">
+        <p>Enter A Username: </p>
+        <form onSubmit={(e) => {e.preventDefault(); setConnection(true);}}>
+          <input value={username} onChange={(e) => setUsername(e.target.value)}/>
+          <button type="submit">Connect</button>
+        </form>
+      </div>
+    )
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+  <div className="flex flex-col">
+    <div>
+      {messages.map((msg:string, i:number) => (<p key={i}>{msg}</p>))}
+    </div>
 
-export default App
+    <form onSubmit={submit}>
+      &gt;&nbsp; <input value={input} onChange={(e) => setInput(e.target.value)}/>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  );
+};
+
+export default App;
