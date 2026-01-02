@@ -1,4 +1,4 @@
-import { Client } from '../../../../lib/client';
+import { Client } from '../client/';
 import { useState, useEffect} from 'react';
 
 export function useClient(username: string, room:string, connected: boolean)

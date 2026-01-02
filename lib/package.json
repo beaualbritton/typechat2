@@ -1,1 +1,7 @@
-{"name": "lib", "type": "module"}
+{
+  "name": "lib",
+  "type": "module",
+  "dependencies": {
+    "react": "^19.2.3"
+  }
+}
