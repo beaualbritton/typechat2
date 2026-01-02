@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useClient } from '../../lib/hooks/useClient.ts';
+import { useClient } from '@lib/hooks/useClient';
 
 function App() {
 

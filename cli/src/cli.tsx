@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { render, Box, Text } from 'ink';
 import TextInput from 'ink-text-input';
-import {useClient} from "../../lib/hooks/useClient";
+import {useClient} from "@lib/hooks/useClient";
 
 const App = () => 
 {
