@@ -2,54 +2,51 @@
 import { useState, useEffect } from 'react';
 import { render, Box, Text } from 'ink';
 import TextInput from 'ink-text-input';
-import {Client} from "../../lib/client/"
+import {useClient} from "../../lib/hooks/useClient";
 
 const App = () => 
 {
-  const [messages, setMessages] = useState<string[]>(['typechat cli demo with ink :P']);
-  const [input, setInput] = useState('');
-  const [username, setUsername] = useState('');
-  const [connected, setConnection] = useState(false);
-  const [client, setClient] = useState<Client>();
+const [input, setInput] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [room, setRoom] = useState<string>('')
+  const [connected, setConnection] = useState<boolean>(false);
+  const [isNameSet, setIsNameSet] = useState<boolean>(false);
 
-  useEffect(() =>
+  const {messages, sendMessage} = useClient(username, room, connected);
+
+  const submit = () =>
   {
-      if(connected && !client)
-      {
-        let onMessage = (msg: string) => setMessages(prev => [...prev, msg]);
-        setClient(new Client(username, 'localhost', 3000, onMessage))
-      }
-
-  },[connected, username, client]);
-
-  const submit = (msg: string) =>
-  {
-    if (msg === "exit") 
-    {
-      client?.exit();
-      process.exit(0);
-    }
-    client?.sendMessage(msg);
-
-    setMessages([...messages, msg]);
-
+    sendMessage(input)
     setInput('');
   };
 
-  if(!connected)
+  if(!connected )
   {
-    return(
+    if (!isNameSet)
+    {
+      return(
       <Box flexDirection='column'>
         <Text>Enter A Username: </Text>
-        <TextInput value={username} onChange={setUsername} onSubmit={(usr) => {setUsername(usr); setConnection(true);}}/>
+        <TextInput value={username} onChange={setUsername} onSubmit={(usr) => {setUsername(usr); setIsNameSet(true)}}/>
       </Box>
-    )
+      )
+    }
+    else
+    {
+      return(
+        <Box flexDirection='column'>
+          <Text>Enter A Room Number: </Text>
+          <TextInput value={room} onChange={setRoom} onSubmit={(rm) => {setRoom(rm); setConnection(true);}}/>
+        </Box>
+      )
+    }
+    
   }
 
 
   return (
   <Box flexDirection="column">
-    {messages.map((msg, i) => (<Text color = "yellow" key={i}>{msg}</Text>))}
+    {messages.map((msg: string, i:number) => (<Text color = "yellow" key={i}>{msg}</Text>))}
 
     <Text color="green">
       &gt;&nbsp; <TextInput value={input} onChange={setInput} onSubmit={submit}/>

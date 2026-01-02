@@ -25,6 +25,9 @@
     },
     "lib": {
       "name": "lib",
+      "dependencies": {
+        "react": "^19.2.3",
+      },
     },
     "server": {
       "name": "server",
